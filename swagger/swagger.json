@@ -1,0 +1,147 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Cat API с кэшированием",
+    "description": "API для вызова и кэширования изображений котиков"
+  },
+  "host": "localhost:3000",
+  "basePath": "/api",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/cats": {
+      "get": {
+        "summary": "Загрузить картинки котиков",
+        "description": "Загружает картинки котиков с помощью The Cat API в кэш",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string"
+                  },
+                  "id": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/cache": {
+      "delete": {
+        "summary": "Очистить кэш",
+        "description": "Удаляет все данные с кэша",
+        "responses": {
+          "200": {
+            "description": "Cache cleared"
+          }
+        }
+      }
+    },
+    "/cache/size": {
+      "post": {
+        "summary": "Установить размер кэша",
+        "description": "Устанавливает максимальный размер кэша",
+        "parameters": [
+          {
+            "name": "size",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "size": {
+                  "type": "integer",
+                  "example": 100
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Размер кэша обновлён"
+          },
+          "400": {
+            "description": "Неверный размер кэша"
+          }
+        }
+      }
+    },
+    "/cats/{id}": {
+      "get": {
+        "summary": "Выбрать изображение котика по ID",
+        "description": "Выбтрает изображение котика по ID из кэша",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID of the cat image"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Удалить изображение котика по ID",
+        "description": "Удаляет изображение котика по ID из кэша",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID of the cat image to delete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful deletion",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Cache entry not found"
+          }
+        }
+      }
+    }
+  }
+}
